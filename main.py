@@ -217,3 +217,29 @@ features = np.array([[-0.43942006,  3.12628155, -1.12165014, -0.27288841, -1.422
        -0.23979304, -1.31238772,  2.61111401, -1.0016859 , -0.5778192 ,
        -0.97491834,  0.41164221, -0.86091034]])
 model.predict(features)
+# model.predict(features)
+predicted_price = model.predict(features)
+print(predicted_price)
+
+
+
+
+
+# Unprocessed features and actual prices from the test set
+X_test = strat_test_set.drop("MEDV", axis=1)
+Y_test = strat_test_set["MEDV"]
+
+
+best_match_idx = None
+best_diff = np.inf
+
+for idx, row in X_test.iterrows():
+    diff = np.linalg.norm(row.values - features)
+    if diff < best_diff:
+        best_diff = diff
+        best_match_idx = idx
+
+# Now, we can compare the actual price with the predicted price
+actual_price = Y_test.loc[best_match_idx]
+print(f"Actual price: {actual_price}")
+print(f"Difference: {abs(predicted_price[0] - actual_price)}")
